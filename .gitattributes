@@ -1,0 +1,5 @@
+# Default
+* text eol=lf
+
+# Windows specific files
+*.bat eol=crlf
