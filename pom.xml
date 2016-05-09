@@ -17,6 +17,7 @@
         <java.version>1.8</java.version>
         <main.basedir>${basedir}/../..</main.basedir>
         <maven.checkstyle.version>2.17</maven.checkstyle.version>
+        <maven.enforcer.version>1.4.1</maven.enforcer.version>
     </properties>
 
     <!-- Production dependencies -->
@@ -50,6 +51,44 @@
                             <goals>
                                 <goal>check</goal>
                             </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>${maven.enforcer.version>}</version>
+                    <executions>
+                        <execution>
+                            <id>enforce-jdk-version</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <requireJavaVersion>
+                                        <version>[1.8,)</version>
+                                    </requireJavaVersion>
+                                </rules>
+                            </configuration>
+                        </execution>
+                        <execution>
+                            <id>enforce-banned-dependency-joda-time</id>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                            <configuration>
+                                <rules>
+                                    <bannedDependencies>
+                                        <excludes>
+                                            <exclude>joda-time</exclude>
+                                        </excludes>
+                                        <message>*** Use java.time (JSR-310) instead of joda-time</message>
+                                        <searchTransitive>false</searchTransitive>
+                                    </bannedDependencies>
+                                </rules>
+                                <fail>true</fail>
+                            </configuration>
                         </execution>
                     </executions>
                 </plugin>
