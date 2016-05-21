@@ -1,6 +1,5 @@
 package com.aem999;
 
-import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 
@@ -11,12 +10,11 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 public class SpringBootApp {
 
     /**
-     * Start app.
+     * Start application.
      */
     public static void main(String[] args) {
         new SpringApplicationBuilder()
                 .sources(SpringBootApp.class)
-                .bannerMode(Banner.Mode.OFF)
                 .run(args);
     }
 }

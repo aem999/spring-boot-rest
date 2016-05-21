@@ -1,0 +1,10 @@
+# Spring properties
+spring:
+  application:
+    name: spring-boot-rest
+  main:
+    banner-mode: "off"
+
+# HTTP server
+server:
+  port: 8050
