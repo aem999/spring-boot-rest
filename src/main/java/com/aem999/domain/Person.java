@@ -1,17 +1,37 @@
 package com.aem999.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+
 /**
  * Person domain object.
  */
+@Entity
+@Table(name = "person", schema = "app_schema")
+@SequenceGenerator(name = "id_seq", sequenceName = "app_schema.person_seq", allocationSize = 1, schema = "app_schema")
 public class Person {
+
+    @Id
+    @GeneratedValue(generator = "id_seq", strategy = GenerationType.SEQUENCE)
     private long id;
+
+    @Column(nullable = false, length = 80)
     private String firstName;
+
+    @Column(length = 80)
     private String middleName;
+
+    @Column(nullable = false, length = 80)
     private String lastName;
+
     private int age;
 
-    public Person(long id, String firstName, String middleName, String lastName, int age) {
-        this.id = id;
+    public Person(String firstName, String middleName, String lastName, int age) {
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;

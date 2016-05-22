@@ -8,3 +8,24 @@ spring:
 # HTTP server
 server:
   port: 8050
+
+---
+
+# Database
+spring:
+  profiles: default
+  datasource:
+    url: jdbc:h2:mem:testdb;Mode=Oracle
+    username: sa
+    password:
+    schema: classpath:db/schema-h2.sql
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        hbm2ddl:
+          import_files: import_data.sql
