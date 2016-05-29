@@ -15,8 +15,12 @@ public class PersonController {
     PersonService personService;
 
     @RequestMapping(value = "/api/people/{id}", method = RequestMethod.GET)
-    public Person get(@PathVariable long id) {
+    public Person person(@PathVariable long id) {
         return personService.get(id);
     }
 
+    @RequestMapping(value = "/api/people", method = RequestMethod.GET)
+    public Iterable<Person> people() {
+        return personService.getAll();
+    }
 }

@@ -31,15 +31,16 @@ public class Person {
 
     private int age;
 
-    public Person(String firstName, String middleName, String lastName, int age) {
+    // For Jackson/JPA
+    Person() {}
+
+    // For Testing
+    public Person(long id, String firstName, String middleName, String lastName, int age) {
+        this.id = id;
         this.firstName = firstName;
         this.middleName = middleName;
         this.lastName = lastName;
         this.age = age;
-    }
-
-    Person() {
-        // For Jackson/JPA
     }
 
     public long getId() {

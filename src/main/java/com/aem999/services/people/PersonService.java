@@ -4,8 +4,11 @@ import com.aem999.domain.Person;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 @Service
+@Transactional(readOnly = true)
 public class PersonService {
 
     @Autowired
@@ -13,5 +16,9 @@ public class PersonService {
 
     public Person get(long id) {
         return repository.findOne(id);
+    }
+
+    public Iterable<Person> getAll() {
+        return repository.findAll();
     }
 }
