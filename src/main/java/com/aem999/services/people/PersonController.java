@@ -4,6 +4,7 @@ import com.aem999.domain.Person;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,4 +24,10 @@ public class PersonController {
     public Iterable<Person> people() {
         return personService.getAll();
     }
+
+    @RequestMapping(value = "/api/people", method = RequestMethod.POST)
+    public Person create(@RequestBody Person newPerson) {
+        return personService.save(newPerson);
+    }
+
 }

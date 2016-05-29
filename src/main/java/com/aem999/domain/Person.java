@@ -1,5 +1,9 @@
 package com.aem999.domain;
 
+import com.aem999.audit.AuditedEntity;
+
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +18,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "person", schema = "app_schema")
 @SequenceGenerator(name = "id_seq", sequenceName = "app_schema.person_seq", allocationSize = 1, schema = "app_schema")
-public class Person {
+@JsonPropertyOrder(value = {"id", "firstName", "middleName", "lastName", "age"}, alphabetic = true)
+public class Person extends AuditedEntity {
 
     @Id
     @GeneratedValue(generator = "id_seq", strategy = GenerationType.SEQUENCE)

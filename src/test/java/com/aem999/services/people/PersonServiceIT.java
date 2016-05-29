@@ -11,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
@@ -38,12 +39,16 @@ public class PersonServiceIT {
 
     private static final Person ALBERT_EINSTEIN = new Person(1, "Albert", null, "Einstein", 76);
     private static final Person LEONARDO_DA_VINCI = new Person(2, "Leonardo", null, "Da Vinci", 67);
+    private static final Person ISAAC_NEWTON = new Person(3, "Isaac", null, "Newton", 84);
 
     @Value("${local.server.port}")
     private int port;
 
     private URL baseURL;
     private RestTemplate template;
+
+    @Autowired
+    private PersonRepository personRepository;
 
 
     @Before
@@ -77,5 +82,14 @@ public class PersonServiceIT {
         Person[] people = response.getBody();
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
         assertThat(people, arrayContaining(ALBERT_EINSTEIN, LEONARDO_DA_VINCI));
+    }
+
+    @Test
+    public void should_save_new_person() {
+        Person isaacNewton = new Person(0, "Isaac", null, "Newton", 84);
+        ResponseEntity<Person> response = template.postForEntity(baseURL.toExternalForm() + "/api/people", isaacNewton, Person.class);
+        Person person = response.getBody();
+        assertThat(response.getStatusCode(), is(HttpStatus.OK));
+        assertThat(person, is(ISAAC_NEWTON));
     }
 }

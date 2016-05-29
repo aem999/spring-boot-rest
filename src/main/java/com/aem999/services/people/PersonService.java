@@ -21,4 +21,9 @@ public class PersonService {
     public Iterable<Person> getAll() {
         return repository.findAll();
     }
+
+    @Transactional(readOnly = false)
+    public Person save(Person newPerson) {
+        return repository.save(newPerson);
+    }
 }
