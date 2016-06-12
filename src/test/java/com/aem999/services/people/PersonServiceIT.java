@@ -42,7 +42,6 @@ public class PersonServiceIT {
 
     private static final Person ALBERT_EINSTEIN = new Person(1, "Albert", null, "Einstein", 76);
     private static final Person LEONARDO_DA_VINCI = new Person(2, "Leonardo", null, "Da Vinci", 67);
-    private static final Person ISAAC_NEWTON = new Person(3, "Isaac", null, "Newton", 84);
 
 
     @Value("${local.server.port}")
@@ -93,17 +92,18 @@ public class PersonServiceIT {
         Person isaacNewton = new Person(0, "Isaac", null, "Newton", 84);
         ResponseEntity<Person> response = template.postForEntity(baseURL.toExternalForm() + "/api/people", isaacNewton, Person.class);
         Person person = response.getBody();
-        assertThat(response.getStatusCode(), is(HttpStatus.OK));
-        assertThat(person, is(ISAAC_NEWTON));
+        assertThat(response.getStatusCode(), is(HttpStatus.CREATED));
+        assertThat(person.getFirstName(), is("Isaac"));
+        assertThat(person.getLastName(), is("Newton"));
+        assertThat(person.getAge(), is(84));
     }
 
     @Test
     public void should_delete_person() throws URISyntaxException {
         Person savedPerson = personRepository.save(new Person(0, "Michelangelo", null, "Di Lodovico", 88));
-        assertThat(savedPerson.getId(), is(3L));
 
         ResponseEntity<Void> response = template.exchange(baseURL.toExternalForm() + "/api/people/3", HttpMethod.DELETE, null, Void.class);
         assertThat(response.getStatusCode(), is(HttpStatus.NO_CONTENT));
-        assertThat(personRepository.findOne(3L), nullValue());
+        assertThat(personRepository.findOne(savedPerson.getId()), nullValue());
     }
 }
