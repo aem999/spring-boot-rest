@@ -26,4 +26,9 @@ public class PersonService {
     public Person save(Person newPerson) {
         return repository.save(newPerson);
     }
+
+    @Transactional(readOnly = false)
+    public void delete(long id) {
+        repository.delete(id);
+    }
 }

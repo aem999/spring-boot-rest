@@ -2,6 +2,7 @@ package com.aem999.services.people;
 
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import com.aem999.SpringBootApp;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.IntegrationTest;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.TestRestTemplate;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
@@ -26,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 /**
@@ -40,6 +43,7 @@ public class PersonServiceIT {
     private static final Person ALBERT_EINSTEIN = new Person(1, "Albert", null, "Einstein", 76);
     private static final Person LEONARDO_DA_VINCI = new Person(2, "Leonardo", null, "Da Vinci", 67);
     private static final Person ISAAC_NEWTON = new Person(3, "Isaac", null, "Newton", 84);
+
 
     @Value("${local.server.port}")
     private int port;
@@ -58,7 +62,7 @@ public class PersonServiceIT {
         template.setErrorHandler(new ResponseErrorHandler() {
             @Override
             public boolean hasError(ClientHttpResponse response) throws IOException {
-                return response.getStatusCode() != HttpStatus.OK;
+                return !response.getStatusCode().is2xxSuccessful();
             }
 
             @Override
@@ -91,5 +95,15 @@ public class PersonServiceIT {
         Person person = response.getBody();
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
         assertThat(person, is(ISAAC_NEWTON));
+    }
+
+    @Test
+    public void should_delete_person() throws URISyntaxException {
+        Person savedPerson = personRepository.save(new Person(0, "Michelangelo", null, "Di Lodovico", 88));
+        assertThat(savedPerson.getId(), is(3L));
+
+        ResponseEntity<Void> response = template.exchange(baseURL.toExternalForm() + "/api/people/3", HttpMethod.DELETE, null, Void.class);
+        assertThat(response.getStatusCode(), is(HttpStatus.NO_CONTENT));
+        assertThat(personRepository.findOne(3L), nullValue());
     }
 }
